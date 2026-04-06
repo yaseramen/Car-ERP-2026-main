@@ -1,0 +1,93 @@
+# بناء حزمة Android (TWA) باستخدام Bubblewrap في السحابة — لا حاجة لـ JDK/SDK على جهازك.
+#
+# المتطلبات (GitHub → Settings → Secrets and variables → Actions):
+#   KEYSTORE_BASE64     محتوى ملف android.keystore مشفّر base64 (انظر README في android-twa)
+#   KEYSTORE_PASSWORD   كلمة مرور الـ keystore
+#   KEY_PASSWORD        كلمة مرور المفتاح (غالباً نفس KEYSTORE_PASSWORD)
+#
+# اختياري: غيّر packageId عند التشغيل من واجهة workflow_dispatch.
+
+name: Android TWA (Bubblewrap AAB)
+
+on:
+  workflow_dispatch:
+    inputs:
+      package_id:
+        description: "Android applicationId (لاتيني، ثابت لـ Play)"
+        required: false
+        default: "com.aiverce.carerp"
+      skip_pwa_validation:
+        description: "تخطي تحقق جودة PWA (إن فشل التحقق من السيرفر)"
+        required: false
+        default: true
+        type: boolean
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      TWA_DIR: android-twa
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check secrets
+        run: |
+          test -n "${{ secrets.KEYSTORE_BASE64 }}" || { echo "::error::أضف السر KEYSTORE_BASE64"; exit 1; }
+          test -n "${{ secrets.KEYSTORE_PASSWORD }}" || { echo "::error::أضف السر KEYSTORE_PASSWORD"; exit 1; }
+          test -n "${{ secrets.KEY_PASSWORD }}" || { echo "::error::أضف السر KEY_PASSWORD"; exit 1; }
+
+      - name: Decode keystore
+        env:
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+        run: |
+          echo "$KEYSTORE_BASE64" | base64 -d > "$TWA_DIR/android.keystore"
+          test -s "$TWA_DIR/android.keystore" || { echo "::error::فك KEYSTORE_BASE64 فشل"; exit 1; }
+
+      - name: Apply packageId from workflow input
+        if: ${{ inputs.package_id != '' }}
+        run: |
+          jq --arg p "${{ inputs.package_id }}" '.packageId = $p' "$TWA_DIR/twa-manifest.json" > /tmp/twa.json && mv /tmp/twa.json "$TWA_DIR/twa-manifest.json"
+          echo "packageId=$(jq -r .packageId "$TWA_DIR/twa-manifest.json")"
+
+      - name: Bubblewrap update + build (Docker)
+        env:
+          BUBBLEWRAP_KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          BUBBLEWRAP_KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: |
+          set -e
+          SKIP_FLAG=""
+          if [ "${{ inputs.skip_pwa_validation }}" = "true" ]; then
+            SKIP_FLAG="--skipPwaValidation"
+          fi
+          # الصورة الرسمية: ENTRYPOINT قد يكون bubblewrap — نستخدم bash لتشغيل أمرين
+          docker run --rm \
+            --entrypoint /bin/bash \
+            -v "${{ github.workspace }}:/workspace" \
+            -w "/workspace/${TWA_DIR}" \
+            -e BUBBLEWRAP_KEYSTORE_PASSWORD \
+            -e BUBBLEWRAP_KEY_PASSWORD \
+            ghcr.io/googlechromelabs/bubblewrap:latest \
+            -lc "set -e; bubblewrap update --manifest . --skipVersionUpgrade && bubblewrap build --manifest . ${SKIP_FLAG}"
+
+      - name: List outputs
+        run: |
+          find "$TWA_DIR" -maxdepth 4 -type f \( -name "*.aab" -o -name "*.apk" \) -print 2>/dev/null || true
+          ls -la "$TWA_DIR" || true
+
+      - name: Upload AAB artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-release-bundle
+          path: ${{ env.TWA_DIR }}/**/*.aab
+          if-no-files-found: warn
+
+      - name: Upload signed APK (if present)
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-release-apk
+          path: ${{ env.TWA_DIR }}/**/*release*.apk
+          if-no-files-found: ignore

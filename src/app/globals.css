@@ -1,0 +1,616 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+.dark {
+  --background: #0f172a;
+  --foreground: #f1f5f9;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: #f9fafb;
+  color: #171717;
+  font-family: Arial, Helvetica, sans-serif;
+  /* قراءة أوضح على التابلت والهاتف */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/* أزرار وروابط أسهل للمس على الشاشات اللمسية */
+@media (pointer: coarse) {
+  a[href],
+  button:not([disabled]),
+  [role="button"],
+  input[type="checkbox"],
+  input[type="radio"] {
+    min-height: 44px;
+  }
+}
+
+.dark body {
+  background: #0f172a;
+  color: #f1f5f9;
+}
+
+/* خلفية منطقة المحتوى الرئيسية في الوضع الليلي */
+.dark main {
+  background-color: #0f172a;
+}
+
+input,
+textarea,
+select {
+  color: #171717 !important;
+  background-color: #ffffff !important;
+}
+input::placeholder,
+textarea::placeholder {
+  color: #6b7280 !important;
+}
+
+.dark input,
+.dark textarea,
+.dark select {
+  color: #f1f5f9 !important;
+  background-color: #1e293b !important;
+}
+.dark input::placeholder,
+.dark textarea::placeholder {
+  color: #94a3b8 !important;
+}
+
+dt, th, td, label {
+  color: #171717 !important;
+}
+
+/* في الوضع الليلي: النصوص الفاتحة لضمان الوضوح - استخدام html.dark لزيادة الأولوية */
+html.dark,
+html.dark body {
+  color: #f1f5f9 !important;
+}
+
+html.dark dt,
+html.dark th,
+html.dark td,
+html.dark label {
+  color: #f1f5f9 !important;
+}
+
+html.dark h1,
+html.dark h2,
+html.dark h3,
+html.dark h4,
+html.dark h5,
+html.dark h6 {
+  color: #f1f5f9 !important;
+}
+
+/* أقسام بخلفية فاتحة (مثل الصفحة الرئيسية): العناوين والنصوص الرمادية تبقى داكنة حتى في الوضع الليلي */
+html.dark .light-section h1,
+html.dark .light-section h2,
+html.dark .light-section h3,
+html.dark .light-section h4,
+html.dark .light-section h5,
+html.dark .light-section h6 {
+  color: #111827 !important;
+}
+/* عنوان العلامة بألوان الزمرد — لا يُجبر على الرمادي */
+html.dark .light-section h1.text-emerald-900,
+html.dark .light-section .text-emerald-900 {
+  color: #064e3b !important;
+}
+html.dark .light-section [class*="text-gray-900"],
+html.dark .light-section [class*="text-gray-950"],
+html.dark .light-section .text-gray-900,
+html.dark .light-section .text-gray-950 {
+  color: #111827 !important;
+}
+html.dark .light-section [class*="text-gray-800"],
+html.dark .light-section .text-gray-800 {
+  color: #1f2937 !important;
+}
+html.dark .light-section [class*="text-gray-700"],
+html.dark .light-section .text-gray-700 {
+  color: #374151 !important;
+}
+html.dark .light-section [class*="text-gray-600"],
+html.dark .light-section .text-gray-600 {
+  color: #4b5563 !important;
+}
+html.dark .light-section [class*="text-gray-500"],
+html.dark .light-section .text-gray-500 {
+  color: #6b7280 !important;
+}
+html.dark .light-section .text-emerald-600 {
+  color: #059669 !important;
+}
+html.dark .light-section .hover\:text-emerald-700:hover {
+  color: #047857 !important;
+}
+
+/*
+ * الصفحة الرئيسية (light-section): في الوضع الليلي تُحوَّل bg-white و bg-gray-50 إلى خلفيات داكنة
+ * بينما النص يبقى داكنًا — فيختفي النص. نُبقي الخلفيات فاتحة داخل light-section فقط.
+ */
+html.dark .light-section {
+  background-color: #ffffff !important;
+  color: #171717 !important;
+}
+html.dark .light-section .bg-gray-50 {
+  background-color: #f9fafb !important;
+}
+html.dark .light-section .bg-white.rounded-xl,
+html.dark .light-section .bg-white.rounded-lg,
+html.dark .light-section .bg-white.rounded-md {
+  background-color: #ffffff !important;
+  border-color: #e5e7eb !important;
+}
+html.dark .light-section .border-gray-100 {
+  border-color: #f3f4f6 !important;
+}
+html.dark .light-section .border-gray-200 {
+  border-color: #e5e7eb !important;
+}
+html.dark .light-section .marketing-hero {
+  background: linear-gradient(to bottom, #ecfdf5, #ffffff) !important;
+}
+html.dark .light-section .marketing-emerald-tint {
+  /* مطابق لـ bg-emerald-50 صلبة حتى لا تظهر الخلفية الترويجية خلف النص */
+  background-color: #ecfdf5 !important;
+}
+
+/* إجبار جميع نصوص gray على اللون الفاتح في الوضع الليلي */
+html.dark [class*="text-gray-900"],
+html.dark [class*="text-gray-950"],
+html.dark .text-gray-900,
+html.dark .text-gray-950 {
+  color: #f1f5f9 !important;
+}
+html.dark [class*="text-gray-800"],
+html.dark .text-gray-800 {
+  color: #e2e8f0 !important;
+}
+html.dark [class*="text-gray-700"],
+html.dark .text-gray-700 {
+  color: #cbd5e1 !important;
+}
+html.dark [class*="text-gray-600"],
+html.dark .text-gray-600 {
+  color: #94a3b8 !important;
+}
+html.dark [class*="text-gray-500"],
+html.dark .text-gray-500 {
+  color: #94a3b8 !important;
+}
+
+/* نصوص slate/zinc/neutral في الوضع الليلي */
+html.dark [class*="text-slate-"],
+html.dark [class*="text-zinc-"],
+html.dark [class*="text-neutral-"] {
+  color: #cbd5e1 !important;
+}
+
+/* بطاقات وجداول: خلفية داكنة في الوضع الليلي */
+html.dark .bg-white.rounded-xl,
+html.dark .bg-white.rounded-lg,
+html.dark .bg-white.rounded-md,
+.dark .bg-white.rounded-xl,
+.dark .bg-white.rounded-lg,
+.dark .bg-white.rounded-md {
+  background-color: #1e293b !important;
+  border-color: #374151 !important;
+}
+html.dark .bg-gray-50,
+.dark .bg-gray-50 {
+  background-color: #1e293b !important;
+}
+html.dark .border-gray-100,
+html.dark .border-gray-200,
+.dark .border-gray-100,
+.dark .border-gray-200 {
+  border-color: #374151 !important;
+}
+html.dark table thead tr,
+.dark table thead tr {
+  background-color: rgba(55, 65, 81, 0.5) !important;
+}
+html.dark table tbody tr,
+.dark table tbody tr {
+  border-color: #374151 !important;
+}
+html.dark table tbody tr:hover,
+.dark table tbody tr:hover {
+  background-color: rgba(55, 65, 81, 0.3) !important;
+}
+
+@media print {
+  .no-print,
+  aside,
+  nav,
+  [data-sidebar] {
+    display: none !important;
+  }
+  main {
+    width: 100% !important;
+    background: #fff !important;
+    overflow: visible !important;
+  }
+  body,
+  html {
+    background: #fff !important;
+  }
+  html.dark body,
+  html.dark main {
+    background: #fff !important;
+  }
+  /* طباعة: هوامش صفحة أقل — أقرب لبداية الورقة (حراري / A4) */
+  @page {
+    size: a4;
+    margin: 1mm 2mm 5mm 2mm;
+  }
+  .min-h-screen {
+    min-height: auto !important;
+  }
+  .invoice-detail-shell {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  #invoice-print-area {
+    overflow: visible !important;
+    font-size: 21px !important;
+    font-weight: 700 !important;
+    line-height: 1.32;
+    padding: 0 !important;
+    padding-bottom: 1mm !important;
+    margin: 0 !important;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    /* ورقة بيضاء + خط أسود حتى مع تفعيل الوضع الليلي على الشاشة */
+    color: #000 !important;
+    background: #fff !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  #invoice-print-area,
+  #invoice-print-area * {
+    color: #000 !important;
+    background-color: #fff !important;
+    background-image: none !important;
+    box-shadow: none !important;
+  }
+  /* شعار الشركة بجوار بيانات الشركة — داخل التدفق (لا fixed) لتفادي أعطال معاينة الطباعة */
+  #invoice-print-area .invoice-print-company-logo-wrap {
+    align-self: flex-start;
+  }
+  #invoice-print-area .invoice-print-company-logo {
+    max-height: 2.5rem !important;
+    max-width: 4.5rem !important;
+  }
+  #invoice-print-area .invoice-print-content-layer {
+    position: relative;
+    z-index: 1;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  #invoice-print-area a {
+    color: #000 !important;
+    text-decoration: none !important;
+  }
+  /* رأس الجدول: تمييز خفيف دون مظهر الوضع الليلي */
+  #invoice-print-area table.invoice-lines-table thead tr {
+    background-color: #f3f4f6 !important;
+  }
+  #invoice-print-area table.invoice-lines-table thead th {
+    background-color: #f3f4f6 !important;
+    font-size: 21px !important;
+    font-weight: 800 !important;
+  }
+  /* مساحة إضافية عند الفواتير الطويلة حتى لا يغطي التذييل الثابت المحتوى */
+  #invoice-print-area.invoice-print-long-doc {
+    padding-bottom: 12mm !important;
+  }
+  #invoice-print-area .invoice-print-continuation-banner {
+    page-break-after: avoid;
+    break-after: avoid;
+  }
+  #invoice-print-area .invoice-print-title-block {
+    margin-bottom: 0.15rem !important;
+    margin-top: 0 !important;
+  }
+  #invoice-print-area .invoice-print-title-block h1 {
+    font-size: 1.35rem !important;
+    font-weight: 800 !important;
+    margin-bottom: 0.05rem !important;
+    line-height: 1.2 !important;
+  }
+  #invoice-print-area .invoice-print-title-block p {
+    margin-top: 0.08rem !important;
+    line-height: 1.25 !important;
+    font-size: 1rem !important;
+    font-weight: 700 !important;
+  }
+  /* عنوان الشركة: سطر واحد في الطباعة (قص إذا تجاوز عرض الورقة) */
+  #invoice-print-area .invoice-print-address-one-line {
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    max-width: 100% !important;
+  }
+  /* اسم المُصدر: سماح بالتفاف سطرين على الورق الضيق بدل قص النص */
+  #invoice-print-area .invoice-print-issuer-line {
+    white-space: normal !important;
+    overflow: visible !important;
+    text-overflow: unset !important;
+    max-width: 100% !important;
+    word-break: break-word !important;
+  }
+  #invoice-print-area .invoice-print-compact {
+    margin-bottom: 0.12rem !important;
+    margin-top: 0 !important;
+    padding: 0.1rem 0.2rem !important;
+  }
+  #invoice-print-area .invoice-print-compact h1 {
+    font-size: 1.15rem !important;
+    font-weight: 800 !important;
+    margin-bottom: 0.12rem !important;
+  }
+  #invoice-print-area .invoice-print-compact h2 {
+    font-size: 1rem !important;
+    font-weight: 800 !important;
+    margin-bottom: 0.1rem !important;
+  }
+  #invoice-print-area .invoice-print-compact .grid {
+    gap: 0.2rem 0.5rem !important;
+  }
+  /* بيانات الفاتورة + العميل/المورد جنباً إلى جنب في الطباعة لتوفير الارتفاع */
+  #invoice-print-area .invoice-print-meta-grid {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 0.2rem 0.35rem !important;
+    margin-bottom: 0.15rem !important;
+    margin-top: 0 !important;
+  }
+  #invoice-print-area .invoice-print-meta-grid > * {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-bottom: 0 !important;
+    padding: 0.12rem 0.25rem !important;
+  }
+  #invoice-print-area .invoice-print-meta-grid h2 {
+    margin-bottom: 0.1rem !important;
+    font-size: 1.05rem !important;
+    font-weight: 800 !important;
+  }
+  #invoice-print-area .invoice-print-meta-grid dl,
+  #invoice-print-area .invoice-print-meta-grid dt,
+  #invoice-print-area .invoice-print-meta-grid dd {
+    font-size: inherit !important;
+  }
+  #invoice-print-area .invoice-print-dl-tight.space-y-3 > * + * {
+    margin-top: 0.1rem !important;
+  }
+  #invoice-print-area .invoice-print-grid:not(.invoice-print-meta-grid) {
+    display: block !important;
+    gap: 0.35rem !important;
+    margin-bottom: 0.45rem !important;
+  }
+  #invoice-print-area .invoice-print-grid:not(.invoice-print-meta-grid) > * {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-bottom: 0.2rem;
+    padding: 0.15rem 0.3rem !important;
+  }
+  #invoice-print-area .invoice-print-grid:not(.invoice-print-meta-grid) h2 {
+    margin-bottom: 0.15rem !important;
+    font-size: 1.05rem !important;
+    font-weight: 800 !important;
+  }
+  #invoice-print-area .invoice-print-items-wrap {
+    overflow: visible !important;
+  }
+  #invoice-print-area .invoice-print-card {
+    overflow: visible !important;
+    margin-bottom: 0.15rem !important;
+    margin-top: 0 !important;
+    box-shadow: none !important;
+    border-radius: 0.25rem !important;
+  }
+  #invoice-print-area table.invoice-lines-table {
+    width: 100% !important;
+    max-width: 100% !important;
+    table-layout: fixed !important;
+    border-collapse: collapse;
+    font-size: 21px !important;
+    font-weight: 700 !important;
+    border: 1px solid #000 !important;
+  }
+  #invoice-print-area table.invoice-lines-table th,
+  #invoice-print-area table.invoice-lines-table td {
+    padding: 0.2rem 0.22rem !important;
+    line-height: 1.42 !important;
+    border: 1px solid #000 !important;
+    font-weight: 700 !important;
+    vertical-align: top !important;
+  }
+  /* عمود اسم الصنف: أوضح على الطابعة الحرارية (تباعد + ارتفاع سطر) */
+  #invoice-print-area table.invoice-lines-table .invoice-print-item-name {
+    width: 38% !important;
+    font-size: 22px !important;
+    font-weight: 800 !important;
+    line-height: 1.48 !important;
+    letter-spacing: 0.04em !important;
+    word-spacing: 0.08em !important;
+    font-family: Tahoma, "Segoe UI", "Arial Unicode MS", Arial, sans-serif !important;
+    -webkit-font-smoothing: antialiased !important;
+    overflow-wrap: anywhere !important;
+    word-break: break-word !important;
+    hyphens: none !important;
+  }
+  /* أسعار + ج.م في سطر واحد */
+  #invoice-print-area table.invoice-lines-table .invoice-print-money {
+    white-space: nowrap !important;
+    font-size: 21px !important;
+    font-weight: 800 !important;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0 !important;
+    width: 24% !important;
+    vertical-align: middle !important;
+  }
+  #invoice-print-area table.invoice-lines-table .invoice-print-qty-col {
+    width: 11% !important;
+    max-width: none !important;
+    min-width: 0 !important;
+    padding-left: 0.1rem !important;
+    padding-right: 0.1rem !important;
+    font-size: 21px !important;
+    font-weight: 800 !important;
+    vertical-align: middle !important;
+  }
+  #invoice-print-area table.invoice-lines-table thead {
+    display: table-header-group;
+  }
+  /* السماح بانقسام الصفوف الطويلة بين الصفحات (لا نفرض avoid على كل صف) */
+  #invoice-print-area table.invoice-lines-table tbody tr {
+    break-inside: auto;
+    page-break-inside: auto;
+  }
+  #invoice-print-area .invoice-print-notes {
+    padding: 0.25rem 0.35rem !important;
+    margin-bottom: 0.2rem !important;
+    font-size: 18px !important;
+    font-weight: 700 !important;
+  }
+  #invoice-print-area .invoice-print-footer {
+    margin-top: 0.12rem !important;
+    padding-top: 0.12rem !important;
+    font-size: 17px !important;
+    font-weight: 700 !important;
+    line-height: 1.3 !important;
+  }
+  /* يتكرر على كل صفحة في معظم متصفحات الطباعة — تلميح «تابع» للفواتير الطويلة */
+  #invoice-print-area .invoice-print-fixed-footer {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1000;
+    padding: 2px 8mm 3px;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.3;
+    text-align: center;
+    color: #000 !important;
+    background: #fff;
+    border-top: 1px solid #000;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  #invoice-print-area .invoice-print-fixed-footer-inner {
+    max-width: 100%;
+  }
+  #invoice-print-area .invoice-print-payments-row {
+    display: block !important;
+    margin-bottom: 0.5rem !important;
+  }
+  #invoice-print-area .invoice-print-payments-card {
+    padding: 0 !important;
+    margin-bottom: 0.35rem !important;
+  }
+  #invoice-print-area .invoice-print-payments-card .p-4 {
+    padding: 0.35rem 0.5rem !important;
+  }
+  #invoice-print-area .invoice-print-payments-card .border-b {
+    padding-top: 0.25rem !important;
+    padding-bottom: 0.25rem !important;
+  }
+
+  /* طباعة تحليل OBD: إظهار منطقة التحليل فقط */
+  body.obd-printing-root * {
+    visibility: hidden;
+  }
+  body.obd-printing-root #obd-print-area,
+  body.obd-printing-root #obd-print-area * {
+    visibility: visible;
+  }
+  /* صفحة بيضاء بالكامل — وإلا يبقى لون html/body الداكن من الوضع الليلي ظاهراً في المعاينة */
+  html:has(body.obd-printing-root),
+  html:has(body.obd-printing-desc-root) {
+    background: #fff !important;
+  }
+  body.obd-printing-root,
+  body.obd-printing-desc-root {
+    background: #fff !important;
+  }
+  body.obd-printing-root #obd-print-area {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    color: #000 !important;
+    background: #fff !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  /* إلغاء dark: على كل العناصر داخل منطقة الطباعة (مثل الفواتير) */
+  body.obd-printing-root #obd-print-area,
+  body.obd-printing-root #obd-print-area * {
+    color: #000 !important;
+    background-color: #fff !important;
+    background-image: none !important;
+    box-shadow: none !important;
+    border-color: #d1d5db !important;
+  }
+  body.obd-printing-root #obd-print-area a {
+    color: #000 !important;
+    text-decoration: underline !important;
+  }
+  body.obd-printing-root #obd-print-area .no-print {
+    display: none !important;
+    visibility: hidden !important;
+  }
+  body.obd-printing-desc-root * {
+    visibility: hidden;
+  }
+  body.obd-printing-desc-root #obd-desc-print-area,
+  body.obd-printing-desc-root #obd-desc-print-area * {
+    visibility: visible;
+  }
+  body.obd-printing-desc-root #obd-desc-print-area {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    color: #000 !important;
+    background: #fff !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  body.obd-printing-desc-root #obd-desc-print-area,
+  body.obd-printing-desc-root #obd-desc-print-area * {
+    color: #000 !important;
+    background-color: #fff !important;
+    background-image: none !important;
+    box-shadow: none !important;
+    border-color: #d1d5db !important;
+  }
+  body.obd-printing-desc-root #obd-desc-print-area a {
+    color: #000 !important;
+    text-decoration: underline !important;
+  }
+  body.obd-printing-desc-root #obd-desc-print-area .no-print {
+    display: none !important;
+    visibility: hidden !important;
+  }
+}
