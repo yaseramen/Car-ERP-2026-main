@@ -19,8 +19,8 @@
   "maskableIconUrl": "https://car.aiverce.com/icon-512.png",
   "splashScreenFadeOutDuration": 300,
   "signingKey": {
-    "path": "./android.keystore",
-    "alias": "android"
+    "path": "my-release-key.jks",
+    "alias": "my-release-key"
   },
   "appVersion": "1",
   "appVersionCode": 1,
