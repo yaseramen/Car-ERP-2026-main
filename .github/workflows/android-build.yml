@@ -71,7 +71,7 @@ jobs:
             -e BUBBLEWRAP_KEYSTORE_PASSWORD \
             -e BUBBLEWRAP_KEY_PASSWORD \
             ghcr.io/googlechromelabs/bubblewrap:latest \
-            -lc "set -e; bubblewrap update --manifest . --skipVersionUpgrade && bubblewrap build --manifest . ${SKIP_FLAG}"
+            -lc "set -e; bubblewrap update --manifest twa-manifest.json --skipVersionUpgrade && bubblewrap build --manifest twa-manifest.json ${SKIP_FLAG}"
 
       - name: List outputs
         run: |
